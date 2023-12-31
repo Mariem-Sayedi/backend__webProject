@@ -1,0 +1,118 @@
+const express=require('express')
+const route=express.Router()
+const db=require('../models')
+const bcrypt=require('bcrypt')
+const jwt=require('jsonwebtoken')
+
+route.post('/admin/adduser', (req, res, next) => {
+    db.User.count({ where: { email: req.body.email } })
+      .then((doc) => {
+        if (doc != 0) {
+          res.status(400).send('This email is already used');
+        } else {
+          bcrypt.hash(req.body.password, 10).then((hashedPassword) => {
+            db.User.create({
+              username: req.body.username,
+              email: req.body.email,
+              password: hashedPassword,
+            })
+              .then((response) => {
+                res.status(200).send(response);
+              })
+              .catch((err) => {
+                res.status(400).send(err);
+              });
+          });
+        }
+      })
+      .catch((err) => {
+        res.status(500).send(err);
+      });
+  });
+
+
+
+  const PrivateKey="This is private key jhbcdfK83UEJNCDKDCN"
+  route.post('/login', (req,res,next)=>{
+    db.User.findOne({where:{email:req.body.email}})
+    .then((user)=>{
+        if(!user){
+            res.status(400).json({err:"invalid email or password"})
+        }
+        else{
+            bcrypt.compare(req.body.password, user.password)
+            .then((same)=>{
+                if(same){
+                    let token=jwt.sign({id:user.id,username:user.id,
+                        role:"userrole"},
+                        PrivateKey,
+                        {expiresIn:"1h"}
+                        )
+                    res.status(200).json({token:token})
+                }
+                else{
+                    res.status(400).json({err:"invalid email or password"})
+                }
+            })
+        }
+    })
+  })
+
+
+
+
+route.post('/createuser', (req,res,next)=>{
+    db.User.create(req.body)
+    .then((response)=>{
+        res.status(200).send(response)
+    })
+    .catch((err)=>{
+        res.status(400).send(err)
+    })
+})
+
+route.get('/user/:id',(req,res,next)=>{
+    db.User.findOne({where:{id:req.params.id}})
+    .then((response)=>{
+        res.status(200).send(response)
+    })
+    .catch((err)=>{
+        res.status(400).send(err)
+    })
+})
+
+route.get('/users',(req,res,next)=>{
+    db.User.findAll()
+    .then((response)=>{
+        res.status(200).send(response)
+    })
+    .catch((err)=>{
+        res.status(400).send(err)
+    })
+})
+
+route.patch('/user/:id',(req,res,next)=>{
+    db.User.update(req.body,{where:{id:req.params.id}})
+    .then((response)=>{
+        res.status(200).send(response)
+    })
+    .catch((err)=>{
+        res.status(400).send(err)
+    })
+})
+
+route.delete('/deleteUser/:id',(req,res,next)=>{
+    db.User.destroy({where:{id:req.params.id}})
+    .then((response)=>{
+        res.status(200).send(response)
+    })
+    .catch((err)=>{
+        res.status(400).send(err)
+    })
+})
+
+module.exports=route
+
+
+
+

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .tasks-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+        }
+
+        .task {
+            flex-basis: calc(33.33% - 10px);
+            margin-bottom: 20px;
+            margin-right: 10px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #d8c0d7;
+            border-radius: 8px;
+            box-shadow: 5px 5px 10px #d8c0d7, -5px -5px 10px #ffffff;
+        }
+
+        .task h4 {
+            margin: 10px 0;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .task .title {
+            text-align: center; /* Center the title */
+        }
+
+        .task .info {
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        .feedback-container {
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+        }
+
+        .feedback-btn,
+        .delete-btn {
+            background-color: #fee2fd;
+            border: 1px solid #d8c0d7;
+            border-radius: 8px;
+            padding: 5px 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .feedback-btn:hover,
+        .delete-btn:hover {
+            background-color: #d8c0d7;
+        }
+    </style>
+</head>
+<body>
+    <h1>helloooo</h1>
+    <div class="tasks-container">
+        <% for (let task of tasks) { %>
+            <div class="task">
+                <h4 class="title"><%= task.title %></h4>
+                <div class="info">
+                    <h4><%= task.category %>: <%= task.description %></h4>
+                    <h4>Priority: <%= task.priority %></h4>
+                </div>
+                <div class="info">
+                    <h4>Owner: <%= task.owner %></h4>
+                    <h4>Date of creation: <%= task.ddate %></h4>
+                </div>
+                <div class="feedback-container">
+                    <textarea class="form-control" placeholder="Your task..."></textarea>
+                    <button class="feedback-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 512 512">
+                            <!-- Feedback icon SVG code -->
+                        </svg>
+                        Add Feedback
+                    </button>
+                    <button class="delete-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 512 512">
+                            <!-- Delete icon SVG code -->
+                        </svg>
+                        Delete Task
+                    </button>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>

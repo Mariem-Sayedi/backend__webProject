@@ -1,0 +1,39 @@
+module.exports=(sequelize,Datatype)=>{
+    const Task=sequelize.define("Task", {
+      title:{
+        type:Datatype.STRING,
+        allowNull:false
+      },
+      description:{
+        type:Datatype.STRING,
+        allowNull:false
+      },
+      owner:{
+        type:Datatype.STRING,
+        allowNull:false
+      },
+      priority:{
+        type:Datatype.STRING,
+        allowNull:false
+      },
+      category:{
+        type:Datatype.STRING,
+        allowNull:false
+      },
+      ddate:{
+        type:Datatype.STRING,
+        allowNull:false
+      },
+      state:{
+        type:Datatype.STRING,
+        allowNull:false
+      }
+    })
+    Task.associate=models=>{
+      Task.belongsTo(models.User,{
+        onDelete:"cascade"
+      })
+      
+    }
+    return Task
+  }
